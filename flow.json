@@ -1,0 +1,344 @@
+[
+    {
+        "id": "b8572ed5f0fe3da6",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "temp_inject",
+        "type": "inject",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Temperature Sensor",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "5",
+        "payload": "",
+        "payloadType": "date",
+        "x": 380,
+        "y": 80,
+        "wires": [
+            [
+                "temp_func"
+            ]
+        ]
+    },
+    {
+        "id": "temp_func",
+        "type": "function",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Generate Temperature",
+        "func": "msg.payload = (20 + Math.random()*10).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "x": 600,
+        "y": 80,
+        "wires": [
+            [
+                "mqtt_temp"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_temp",
+        "type": "mqtt out",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Publish Temperature",
+        "topic": "campus/room1/temperature",
+        "qos": "1",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt_broker",
+        "x": 840,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "hum_inject",
+        "type": "inject",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Humidity Sensor",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "5",
+        "payload": "",
+        "payloadType": "date",
+        "x": 380,
+        "y": 160,
+        "wires": [
+            [
+                "hum_func"
+            ]
+        ]
+    },
+    {
+        "id": "hum_func",
+        "type": "function",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Generate Humidity",
+        "func": "msg.payload = (40 + Math.random()*20).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "x": 600,
+        "y": 160,
+        "wires": [
+            [
+                "mqtt_hum"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_hum",
+        "type": "mqtt out",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Publish Humidity",
+        "topic": "campus/room1/humidity",
+        "qos": "1",
+        "retain": "",
+        "broker": "mqtt_broker",
+        "x": 840,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "mqtt_sub",
+        "type": "mqtt in",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Wildcard Subscriber",
+        "topic": "campus/room1/#",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 450,
+        "y": 280,
+        "wires": [
+            [
+                "debug_node"
+            ]
+        ]
+    },
+    {
+        "id": "debug_node",
+        "type": "debug",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Log Messages",
+        "active": true,
+        "tosidebar": true,
+        "x": 670,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "mqtt_temp_sub",
+        "type": "mqtt in",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Temperature Dashboard",
+        "topic": "campus/room1/temperature",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "mqtt_broker",
+        "inputs": 0,
+        "x": 370,
+        "y": 400,
+        "wires": [
+            [
+                "dc628892a3dc23b2"
+            ]
+        ]
+    },
+    {
+        "id": "temp_gauge",
+        "type": "ui_gauge",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Temperature",
+        "group": "dashboard_group",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "°C",
+        "format": "",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 750,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "mqtt_hum_sub",
+        "type": "mqtt in",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Humidity Dashboard",
+        "topic": "campus/room1/humidity",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 370,
+        "y": 480,
+        "wires": [
+            [
+                "036c7a3865b76141"
+            ]
+        ]
+    },
+    {
+        "id": "hum_chart",
+        "type": "ui_chart",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Humidity Chart",
+        "group": "dashboard_group",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Humidity %",
+        "chartType": "line",
+        "xformat": "HH:mm:ss",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": "10",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": "",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 700,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dc628892a3dc23b2",
+        "type": "function",
+        "z": "b8572ed5f0fe3da6",
+        "name": "Convert number ",
+        "func": "msg.payload = Number(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 400,
+        "wires": [
+            [
+                "temp_gauge"
+            ]
+        ]
+    },
+    {
+        "id": "036c7a3865b76141",
+        "type": "function",
+        "z": "b8572ed5f0fe3da6",
+        "name": "function 2",
+        "func": "msg.payload = parseFloat(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 480,
+        "wires": [
+            [
+                "hum_chart"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "Mosquitto Broker",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 15,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "dashboard_group",
+        "type": "ui_group",
+        "name": "Sensor Data",
+        "tab": "dashboard_tab",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "dashboard_tab",
+        "type": "ui_tab",
+        "name": "Campus Monitoring",
+        "icon": "dashboard"
+    },
+    {
+        "id": "f2abe6656d20ea5f",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
